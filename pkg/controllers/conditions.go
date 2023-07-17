@@ -144,7 +144,7 @@ func GetMinioCondition(ctx context.Context, logger logr.Logger, cli client.Clien
 		IAMEndpoint: info.IAMEndpoint,
 	}
 
-	logger.info("checkMinIO ", "args", test)
+	logger.Info("checkMinIO ", "args", test)
 
 	err := checkMinIO(test)
 	if err != nil {
