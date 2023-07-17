@@ -132,7 +132,8 @@ func GetMinioCondition(ctx context.Context, logger logr.Logger, cli client.Clien
 			return newErrStorageCondResult(v1beta1.ReasonSecretNotExist, MessageKeyNotExist)
 		}
 	}
-	err := checkMinIO(external.CheckMinIOArgs{
+
+	test := external.CheckMinIOArgs{
 		Type:        info.Storage.Type,
 		AK:          string(accesskey),
 		SK:          string(secretkey),
@@ -141,8 +142,13 @@ func GetMinioCondition(ctx context.Context, logger logr.Logger, cli client.Clien
 		UseSSL:      info.UseSSL,
 		UseIAM:      info.UseIAM,
 		IAMEndpoint: info.IAMEndpoint,
-	})
+	}
+
+	logger.info("checkMinIO ", "args", test)
+
+	err := checkMinIO(test)
 	if err != nil {
+		logger.Error(err, "checkMinIO error")
 		return newErrStorageCondResult(v1beta1.ReasonClientErr, err.Error())
 	}
 
